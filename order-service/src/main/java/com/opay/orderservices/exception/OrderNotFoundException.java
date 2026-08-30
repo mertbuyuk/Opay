@@ -1,4 +1,4 @@
-package com.opay.Opay.exception;
+package com.opay.orderservices.exception;
 
 import java.util.UUID;
 

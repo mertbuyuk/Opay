@@ -1,4 +1,4 @@
-package com.opay.Opay;
+package com.opay.orderservices;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

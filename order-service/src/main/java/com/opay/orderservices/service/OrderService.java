@@ -1,14 +1,14 @@
-package com.opay.Opay.service;
+package com.opay.orderservices.service;
 
-import com.opay.Opay.Mapper.OrderMapper;
-import com.opay.Opay.dto.CreateOrderRequest;
-import com.opay.Opay.dto.OrderItemRequest;
-import com.opay.Opay.dto.OrderResponse;
-import com.opay.Opay.exception.OrderNotFoundException;
-import com.opay.Opay.model.Order;
-import com.opay.Opay.model.OrderItem;
-import com.opay.Opay.model.OrderStatus;
-import com.opay.Opay.repository.OrderRepository;
+import com.opay.orderservices.Mapper.OrderMapper;
+import com.opay.orderservices.dto.CreateOrderRequest;
+import com.opay.orderservices.dto.OrderItemRequest;
+import com.opay.orderservices.dto.OrderResponse;
+import com.opay.orderservices.exception.OrderNotFoundException;
+import com.opay.orderservices.model.Order;
+import com.opay.orderservices.model.OrderItem;
+import com.opay.orderservices.model.OrderStatus;
+import com.opay.orderservices.repository.OrderRepository;
 import org.springframework.transaction.annotation.Transactional;import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

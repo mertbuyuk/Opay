@@ -1,4 +1,4 @@
-package com.opay.Opay.dto;
+package com.opay.orderservices.dto;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;

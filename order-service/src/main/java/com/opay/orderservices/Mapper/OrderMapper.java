@@ -1,14 +1,12 @@
-package com.opay.Opay.Mapper;
+package com.opay.orderservices.Mapper;
 
-import com.opay.Opay.dto.OrderItemRequest;
-import com.opay.Opay.dto.OrderItemResponse;
-import com.opay.Opay.dto.OrderResponse;
-import com.opay.Opay.model.Order;
-import com.opay.Opay.model.OrderItem;
+import com.opay.orderservices.dto.OrderItemRequest;
+import com.opay.orderservices.dto.OrderItemResponse;
+import com.opay.orderservices.dto.OrderResponse;
+import com.opay.orderservices.model.Order;
+import com.opay.orderservices.model.OrderItem;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class OrderMapper {
 

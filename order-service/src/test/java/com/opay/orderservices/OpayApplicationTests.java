@@ -1,4 +1,4 @@
-package com.opay.Opay;
+package com.opay.orderservices;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

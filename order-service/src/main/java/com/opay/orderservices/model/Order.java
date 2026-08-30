@@ -1,4 +1,4 @@
-package com.opay.Opay.model;
+package com.opay.orderservices.model;
 
 import jakarta.persistence.*;
 import lombok.*;

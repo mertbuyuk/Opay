@@ -1,4 +1,4 @@
-package com.opay.Opay.model;
+package com.opay.orderservices.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;

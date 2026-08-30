@@ -1,12 +1,9 @@
-package com.opay.Opay.controller;
+package com.opay.orderservices.controller;
 
-import com.opay.Opay.dto.CreateOrderRequest;
-import com.opay.Opay.dto.OrderResponse;
-import com.opay.Opay.service.OrderService;
-import lombok.Getter;
+import com.opay.orderservices.dto.CreateOrderRequest;
+import com.opay.orderservices.dto.OrderResponse;
+import com.opay.orderservices.service.OrderService;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

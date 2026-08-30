@@ -1,6 +1,6 @@
-package com.opay.Opay.dto;
+package com.opay.orderservices.dto;
 
-import com.opay.Opay.model.OrderStatus;
+import com.opay.orderservices.model.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.opay.Opay.dto;
+package com.opay.orderservices.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

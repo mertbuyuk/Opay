@@ -1,3 +1,37 @@
+server:
+  port: 8081
+
 spring:
   application:
-    name: Opay
+    name: order-service
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:orbitpay}
+    username: ${DB_USERNAME:orbitpay}
+    password: ${DB_PASSWORD:orbitpay}
+  jpa:
+    hibernate:
+      ddl-auto: validate   # schema is owned by Flyway, not Hibernate -- see docs/decisions/adr
+    open-in-view: false    # avoid the Open Session In View anti-pattern
+    properties:
+      hibernate:
+        format_sql: true
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+  mvc:
+    problemdetail:
+      enabled: true   # RFC 7807 ProblemDetail for exceptions we don't explicitly handle too
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+springdoc:
+  swagger-ui:
+    path: /docs        # http://localhost:8081/docs instead of the default /swagger-ui.html
+
+logging:
+  level:
+    org.hibernate.SQL: debug

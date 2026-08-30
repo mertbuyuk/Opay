@@ -1,4 +1,4 @@
-package com.opay.Opay.model;
+package com.opay.orderservices.model;
 
 public enum OrderStatus {
     CREATED,
