@@ -1,6 +1,7 @@
 package com.opay.orderservices.exception;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -11,31 +12,37 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
+/**Problem detail
+ * {
+ *   "type": "https://example.com/problems/validation-error",
+ *   "title": "Validation failed",
+ *   "status": 400,
+ *   "detail": "One or more fields are invalid",
+ *   "instance": "/orders/123"
+ * }
+ * */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(OrderNotFoundException.class)
-    public ResponseEntity<Map<String,Object>> handleNotFound(OrderNotFoundException ex){
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorBody(ex.getMessage()));
+    public ProblemDetail handleNotFound(OrderNotFoundException ex) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+        problem.setTitle("Order not found");
+        problem.setProperty("timestamp", Instant.now());
+        return problem;
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, Object>> handleValidation(MethodArgumentNotValidException ex) {
+    public ProblemDetail handleValidation(MethodArgumentNotValidException ex) {
         Map<String, String> fieldErrors = new HashMap<>();
         for (FieldError error : ex.getBindingResult().getFieldErrors()) {
             fieldErrors.put(error.getField(), error.getDefaultMessage());
         }
 
-        Map<String, Object> body = errorBody("Validation failed");
-        body.put("fields", fieldErrors);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
-    }
-
-    private Map<String,Object> errorBody(String message){
-        Map<String,Object> body = new HashMap<>();
-        body.put("timestamp", Instant.now().toString());
-        body.put("message", message);
-
-        return body;
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, "Validation failed");
+        problem.setTitle("Invalid request");
+        problem.setProperty("timestamp", Instant.now());
+        problem.setProperty("errors", fieldErrors);
+        return problem;
     }
 }

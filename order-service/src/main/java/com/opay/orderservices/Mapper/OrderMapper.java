@@ -5,46 +5,22 @@ import com.opay.orderservices.dto.OrderItemResponse;
 import com.opay.orderservices.dto.OrderResponse;
 import com.opay.orderservices.model.Order;
 import com.opay.orderservices.model.OrderItem;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
 
-public class OrderMapper {
+@Mapper(componentModel = "spring")
+public interface OrderMapper {
 
-    public OrderMapper() {
+    OrderItem toOrderItem(OrderItemRequest request);
 
-    }
+    // "items" maps automatically: MapStruct sees List<OrderItem> -> List<OrderItemResponse>
+    // and looks for -- and finds -- toItemResponse(OrderItem) below to map each element.
+    OrderResponse toOrderResponse(Order order);
 
-    public static OrderItem toOrderItem(OrderItemRequest orderItemRequest) {
-        return OrderItem.builder()
-                .sku(orderItemRequest.getSku())
-                .quantity(orderItemRequest.getQuantity())
-                .unitPrice(orderItemRequest.getUnitPrice())
-                .build();
-
-    }
-
-    public static OrderResponse toOrderResponse(Order order) {
-        List<OrderItemResponse> orderItemResponses = order.getOrderItems()
-                .stream().map(OrderMapper::toItemResponse).toList();
-
-        return OrderResponse.builder()
-                .id(order.getId())
-                .merchantId(order.getMerchantId())
-                .items(orderItemResponses)
-                .createdAt(order.getCreatedAt())
-                .totalAmount(order.getTotalAmount())
-                .status(order.getOrderStatus())
-                .build();
-    }
-
-    private static OrderItemResponse toItemResponse(OrderItem item) {
-        return OrderItemResponse.builder()
-                .sku(item.getSku())
-                .quantity(item.getQuantity())
-                .unitPrice(item.getUnitPrice())
-                .lineTotal(item.lineTotal())
-                .build();
-    }
-
+    @Mapping(target = "lineTotal", expression = "java(item.lineTotal())")
+    OrderItemResponse toItemResponse(OrderItem item);
 }
+
 
