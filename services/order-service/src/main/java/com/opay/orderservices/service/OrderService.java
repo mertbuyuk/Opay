@@ -1,11 +1,14 @@
 package com.opay.orderservices.service;
 
+import com.opay.events.order.OrderItemEvent;
 import com.opay.orderservices.Mapper.OrderMapper;
 import com.opay.orderservices.dto.CreateOrderRequest;
 import com.opay.orderservices.dto.OrderItemRequest;
 import com.opay.orderservices.dto.OrderResponse;
 import com.opay.orderservices.dto.PageResponse;
 import com.opay.orderservices.exception.OrderNotFoundException;
+import com.opay.orderservices.messaging.OrderCreatedApplicationEvent;
+import com.opay.orderservices.messaging.OrderDomainEventListener;
 import com.opay.orderservices.model.Order;
 import com.opay.orderservices.model.OrderItem;
 import com.opay.orderservices.model.OrderStatus;
@@ -16,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;import lombok.Re
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,6 +29,7 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
+    private final OrderDomainEventListener orderDomainEventListener;
 
     @Transactional
     public OrderResponse createOrder(CreateOrderRequest orderRequest){
@@ -34,14 +39,24 @@ public class OrderService {
                 .totalAmount(BigDecimal.ZERO)
                 .build();
 
+        List<OrderItemEvent> itemEvents = new ArrayList<>();
+
         for (OrderItemRequest itemRequest : orderRequest.getItems()){
             OrderItem orderItem = orderMapper.toOrderItem(itemRequest);
             order.addItem(orderItem);
+            itemEvents.add(new OrderItemEvent(itemRequest.getSku(), itemRequest.getQuantity(), itemRequest.getUnitPrice()));
         }
 
         order.setTotalAmount(calculateTotalAmount(order.getOrderItems()));
-
         Order saved = orderRepository.save(order);
+        OrderCreatedApplicationEvent event = new OrderCreatedApplicationEvent(
+                order.getId(),
+                order.getMerchantId(),
+                order.getTotalAmount(),
+                itemEvents
+        );
+        orderDomainEventListener.onOrderCreated(event);
+
         return orderMapper.toOrderResponse(saved);
     }
 
