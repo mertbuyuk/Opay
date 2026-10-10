@@ -1,16 +1,16 @@
 server:
-  port: 8082
+  port: 8083
 
 spring:
   application:
-    name: inventory-service
+    name: payment-service
   datasource:
-    url: jdbc:postgresql://localhost:5432/inventory_db
+    url: jdbc:postgresql://localhost:5432/payment_db
     username: postgres
     password: r123-
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: validate   # schema owned by Flyway, not Hibernate -- same rule as order-service
     open-in-view: false
     properties:
       hibernate:
@@ -27,13 +27,22 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     consumer:
-      group-id: inventory-service
+      group-id: payment-service
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
       properties:
         spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
         spring.json.trusted.packages: "com.opay.events.*"
+
+# Mock payment gateway behaviour -- see adapter.out.gateway.MockPaymentGatewayAdapter. Both
+# thresholds/limits are configurable rather than hard-coded purely so the retry/DLQ path can be
+# demonstrated on demand in a demo without needing to hand-craft a specific order total.
+orbitpay:
+  payment:
+    gateway:
+      decline-above-amount: 10000.00   # simulates a hard decline (non-retryable) above this total
+      flaky-attempts: 2                # simulates a transient failure for this many attempts before succeeding
 
 management:
   endpoints:

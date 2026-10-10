@@ -38,7 +38,7 @@ public class Order {
     private UUID merchantId;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false,length = 30,name = "order_status")
+    @Column(nullable = false,length = 30,name = "status")
     private OrderStatus orderStatus;
 
     @Column(name = "total_amount", nullable = false,precision = 19,scale = 2)

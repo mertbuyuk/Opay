@@ -7,7 +7,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/order_db
     username: postgres
-    password: r123
+    password: r123-
   jpa:
     hibernate:
       ddl-auto: validate   # schema is owned by Flyway, not Hibernate
